@@ -8,6 +8,6 @@ type UserService interface {
 	UpdateUser(userID int, input web.UserRegisterInput) (web.UserResponse, error)
 	FindUserByID(userID int) (web.UserResponse, error)
 	FindUserByEmail(email string) (web.UserResponse, error)
-	DeleteUserByID(userID int)
+	DeleteUserByID(userID int) string
 	UploadAvatar(userID int, path string) (web.UserResponse, error)
 }

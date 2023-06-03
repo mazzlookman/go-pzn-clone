@@ -7,7 +7,6 @@ import (
 	"go-pzn-clone/model/web"
 	"go-pzn-clone/repository"
 	"golang.org/x/crypto/bcrypt"
-	"log"
 	"time"
 )
 
@@ -68,6 +67,7 @@ func (s *UserServiceImpl) UpdateUser(userID int, input web.UserRegisterInput) (w
 	findByID.Name = input.Name
 	findByID.Email = input.Email
 	findByID.Password = input.Password
+	findByID.UpdatedAt = time.Now()
 
 	update, err := s.UserRepository.Update(findByID)
 	helper.PanicIfError(err)
@@ -79,6 +79,10 @@ func (s *UserServiceImpl) FindUserByID(userID int) (web.UserResponse, error) {
 	findByID, err := s.UserRepository.FindByID(userID)
 	helper.PanicIfError(err)
 
+	if findByID.ID == 0 {
+		return web.UserResponse{}, errors.New("User not found")
+	}
+
 	return helper.ToUserResponse(findByID), nil
 }
 
@@ -86,14 +90,18 @@ func (s *UserServiceImpl) FindUserByEmail(email string) (web.UserResponse, error
 	findByEmail, err := s.UserRepository.FindByEmail(email)
 	helper.PanicIfError(err)
 
+	if findByEmail.ID == 0 {
+		return web.UserResponse{}, errors.New("User not found")
+	}
+
 	return helper.ToUserResponse(findByEmail), nil
 }
 
-func (s *UserServiceImpl) DeleteUserByID(userID int) {
+func (s *UserServiceImpl) DeleteUserByID(userID int) string {
 	err := s.UserRepository.DeleteByID(userID)
 	helper.PanicIfError(err)
 
-	log.Println("User was deleted")
+	return "User was deleted"
 }
 
 func NewUserService(userRepository repository.UserRepository) *UserServiceImpl {
