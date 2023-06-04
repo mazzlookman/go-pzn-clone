@@ -10,7 +10,7 @@ import (
 
 func TestRegisterUser(t *testing.T) {
 	input := web.UserRegisterInput{
-		Name:     "Ucup",
+		Name:     "Ucup Lagi",
 		Email:    "ucup@test.com",
 		Password: "123",
 	}
@@ -20,7 +20,7 @@ func TestRegisterUser(t *testing.T) {
 
 	findUserByID, _ := userService.FindUserByID(userResponse.ID)
 
-	assert.Equal(t, "Ucup", userResponse.Name)
+	assert.Equal(t, "Ucup Lagi", userResponse.Name)
 	assert.Equal(t, userResponse.ID, findUserByID.ID)
 }
 
@@ -68,18 +68,25 @@ func TestFindUserByID(t *testing.T) {
 }
 
 func TestFindUserByEmail(t *testing.T) {
-	user, err := userService.FindUserByEmail("ucup@test.com")
+	user, err := userService.EmailAvailabilityCheck(web.EmailAvailability{Email: "ucup@test.com"})
 
 	//assert.Equal(t, "User not found", err.Error())
 	assert.Nil(t, err)
-	assert.NotNil(t, user.ID)
+	assert.Equal(t, true, user)
 }
 
 func TestDeleteUserByID(t *testing.T) {
-	findUserByID, _ := userService.FindUserByID(5)
-	deleteUserByID := userService.DeleteUserByID(findUserByID.ID)
-	assert.Equal(t, "User was deleted", deleteUserByID)
+	findUserByID, _ := userService.FindUserByID(8)
+	deleteUserByID, err := userService.DeleteUserByID(findUserByID.ID)
+	if err != nil {
+		assert.Equal(t, false, deleteUserByID)
+		log.Println(deleteUserByID)
+	}
 
-	userDeleted, _ := userService.FindUserByID(5)
+	assert.Equal(t, true, deleteUserByID)
+	log.Println(deleteUserByID)
+
+	userDeleted, _ := userService.FindUserByID(8)
 	assert.Equal(t, 0, userDeleted.ID)
+	log.Println(userDeleted.ID)
 }

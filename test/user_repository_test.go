@@ -1,10 +1,10 @@
 package test
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"go-pzn-clone/helper"
 	"go-pzn-clone/model/domain"
+	"log"
 	"testing"
 )
 
@@ -62,8 +62,9 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDeleteByIDUser(t *testing.T) {
-	err := userRepo.DeleteByID(2)
+	deleteByID, err := userRepo.DeleteByID(7)
 	helper.PanicIfError(err)
 
-	fmt.Println("User is deleted")
+	assert.Equal(t, true, deleteByID)
+	log.Println(deleteByID)
 }

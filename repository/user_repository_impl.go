@@ -51,11 +51,11 @@ func (r *UserRepositoryImpl) FindByEmail(email string) (domain.User, error) {
 	return user, nil
 }
 
-func (r *UserRepositoryImpl) DeleteByID(userID int) error {
+func (r *UserRepositoryImpl) DeleteByID(userID int) (bool, error) {
 	user := domain.User{}
 	err := r.db.Delete(&user, "id=?", userID).Error
 	if err != nil {
-		return err
+		return false, err
 	}
-	return nil
+	return true, nil
 }

@@ -86,22 +86,26 @@ func (s *UserServiceImpl) FindUserByID(userID int) (web.UserResponse, error) {
 	return helper.ToUserResponse(findByID), nil
 }
 
-func (s *UserServiceImpl) FindUserByEmail(email string) (web.UserResponse, error) {
-	findByEmail, err := s.UserRepository.FindByEmail(email)
+func (s *UserServiceImpl) EmailAvailabilityCheck(email web.EmailAvailability) (bool, error) {
+	findByEmail, err := s.UserRepository.FindByEmail(email.Email)
 	helper.PanicIfError(err)
 
-	if findByEmail.ID == 0 {
-		return web.UserResponse{}, errors.New("User not found")
+	if findByEmail.ID == 0 && findByEmail.Email == "" {
+		return true, nil
 	}
 
-	return helper.ToUserResponse(findByEmail), nil
+	return false, errors.New("Email is not available")
 }
 
-func (s *UserServiceImpl) DeleteUserByID(userID int) string {
-	err := s.UserRepository.DeleteByID(userID)
+func (s *UserServiceImpl) DeleteUserByID(userID int) (bool, error) {
+	deleteByID, err := s.UserRepository.DeleteByID(userID)
 	helper.PanicIfError(err)
 
-	return "User was deleted"
+	if deleteByID == false {
+		return false, err
+	}
+
+	return true, nil
 }
 
 func NewUserService(userRepository repository.UserRepository) *UserServiceImpl {
