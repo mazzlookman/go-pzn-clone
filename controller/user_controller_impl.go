@@ -71,12 +71,14 @@ func (c *UserControllerImpl) LoginUser(ctx *gin.Context) {
 	if err != nil {
 		apiResponse := formatter.APIResponse("Login is failed", 400, "error", gin.H{"error": err.Error()})
 		ctx.JSON(http.StatusBadRequest, apiResponse)
+		return
 	}
 
 	loginUser, err := c.UserService.LoginUser(inputJSON)
 	if err != nil {
 		apiResponse := formatter.APIResponse("Login is failed", http.StatusInternalServerError, "error", gin.H{"error": err.Error()})
 		ctx.JSON(http.StatusInternalServerError, apiResponse)
+		return
 	}
 
 	apiResponse := formatter.APIResponse("Register is successfully", 200, "success", loginUser)
@@ -91,7 +93,7 @@ func (c *UserControllerImpl) UploadAvatar(ctx *gin.Context) {
 		return
 	}
 
-	userID := 1
+	userID := 4
 	path := fmt.Sprintf("images/avatar/%d-%s", userID, fileHeader.Filename)
 
 	_ = ctx.SaveUploadedFile(fileHeader, path)
@@ -103,12 +105,7 @@ func (c *UserControllerImpl) UploadAvatar(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, formatter.APIResponse(
-		"Avatar is successfully uploaded",
-		200,
-		"success",
-		gin.H{"is_uploaded": true},
-	))
+	ctx.JSON(200, formatter.APIResponse("Avatar is successfully uploaded", 200, "success", gin.H{"is_uploaded": true}))
 }
 
 func (c *UserControllerImpl) GetUserDetail(ctx *gin.Context) {

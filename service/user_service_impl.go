@@ -47,11 +47,16 @@ func (s *UserServiceImpl) RegisterUser(input web.UserRegisterInput) (web.UserRes
 	user := domain.User{}
 	user.Name = input.Name
 	user.Email = input.Email
-	password, err2 := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
-	helper.PanicIfError(err2)
+	password, _ := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	user.Password = string(password)
+	user.Role = input.Role
 	if input.Role == "" {
 		user.Role = "user"
+	}
+
+	findByEmail, _ := s.UserRepository.FindByEmail(user.Email)
+	if findByEmail.Email == user.Email {
+		return web.UserResponse{}, errors.New("Email has been registered")
 	}
 
 	save, err := s.UserRepository.Save(user)
