@@ -6,7 +6,6 @@ create table courses(
                         description text not null ,
                         perks text not null ,
                         price int not null default 0,
-                        progress int not null default 0,
                         banner varchar(255),
                         created_at datetime not null default current_timestamp,
                         updated_at datetime not null default current_timestamp
