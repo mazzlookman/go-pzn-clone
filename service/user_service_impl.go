@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"go-pzn-clone/helper"
+	"go-pzn-clone/middleware/auth"
 	"go-pzn-clone/model/domain"
 	"go-pzn-clone/model/web"
 	"go-pzn-clone/repository"
@@ -12,6 +13,7 @@ import (
 
 type UserServiceImpl struct {
 	repository.UserRepository
+	auth.JWTAuth
 }
 
 func (s *UserServiceImpl) LoginUser(input web.UserLoginInput) (web.UserResponse, error) {
@@ -27,7 +29,10 @@ func (s *UserServiceImpl) LoginUser(input web.UserLoginInput) (web.UserResponse,
 		return web.UserResponse{}, errors.New("Login failed")
 	}
 
-	return helper.ToUserResponse(findByEmail), nil
+	token, err := s.JWTAuth.GenerateToken(findByEmail.ID)
+	helper.PanicIfError(err)
+
+	return helper.ToUserResponse(findByEmail, token), nil
 }
 
 func (s *UserServiceImpl) UploadAvatar(userID int, path string) (web.UserResponse, error) {
@@ -40,7 +45,10 @@ func (s *UserServiceImpl) UploadAvatar(userID int, path string) (web.UserRespons
 	update, err := s.UserRepository.Update(findByID)
 	helper.PanicIfError(err)
 
-	return helper.ToUserResponse(update), nil
+	token, err := s.JWTAuth.GenerateToken(update.ID)
+	helper.PanicIfError(err)
+
+	return helper.ToUserResponse(update, token), nil
 }
 
 func (s *UserServiceImpl) RegisterUser(input web.UserRegisterInput) (web.UserResponse, error) {
@@ -62,7 +70,10 @@ func (s *UserServiceImpl) RegisterUser(input web.UserRegisterInput) (web.UserRes
 	save, err := s.UserRepository.Save(user)
 	helper.PanicIfError(err)
 
-	return helper.ToUserResponse(save), nil
+	token, err := s.JWTAuth.GenerateToken(save.ID)
+	helper.PanicIfError(err)
+
+	return helper.ToUserResponse(save, token), nil
 }
 
 func (s *UserServiceImpl) UpdateUser(userID int, input web.UserRegisterInput) (web.UserResponse, error) {
@@ -77,7 +88,10 @@ func (s *UserServiceImpl) UpdateUser(userID int, input web.UserRegisterInput) (w
 	update, err := s.UserRepository.Update(findByID)
 	helper.PanicIfError(err)
 
-	return helper.ToUserResponse(update), nil
+	token, err := s.JWTAuth.GenerateToken(update.ID)
+	helper.PanicIfError(err)
+
+	return helper.ToUserResponse(update, token), nil
 }
 
 func (s *UserServiceImpl) FindUserByID(userID int) (web.UserResponse, error) {
@@ -88,7 +102,10 @@ func (s *UserServiceImpl) FindUserByID(userID int) (web.UserResponse, error) {
 		return web.UserResponse{}, errors.New("User not found")
 	}
 
-	return helper.ToUserResponse(findByID), nil
+	token, err := s.JWTAuth.GenerateToken(findByID.ID)
+	helper.PanicIfError(err)
+
+	return helper.ToUserResponse(findByID, token), nil
 }
 
 func (s *UserServiceImpl) EmailAvailabilityCheck(email web.EmailAvailability) (bool, error) {
@@ -113,6 +130,6 @@ func (s *UserServiceImpl) DeleteUserByID(userID int) (bool, error) {
 	return true, nil
 }
 
-func NewUserService(userRepository repository.UserRepository) *UserServiceImpl {
-	return &UserServiceImpl{UserRepository: userRepository}
+func NewUserService(userRepository repository.UserRepository, jwtAuth auth.JWTAuth) *UserServiceImpl {
+	return &UserServiceImpl{UserRepository: userRepository, JWTAuth: jwtAuth}
 }

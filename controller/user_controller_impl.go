@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-pzn-clone/formatter"
-	"go-pzn-clone/model/domain"
 	"go-pzn-clone/model/web"
 	"go-pzn-clone/service"
 	"net/http"
@@ -81,7 +80,7 @@ func (c *UserControllerImpl) LoginUser(ctx *gin.Context) {
 		return
 	}
 
-	apiResponse := formatter.APIResponse("Register is successfully", 200, "success", loginUser)
+	apiResponse := formatter.APIResponse("You're logged in", 200, "success", loginUser)
 	ctx.JSON(200, apiResponse)
 }
 
@@ -93,7 +92,7 @@ func (c *UserControllerImpl) UploadAvatar(ctx *gin.Context) {
 		return
 	}
 
-	userID := 4
+	userID := ctx.MustGet("currentUser").(web.UserResponse).ID
 	path := fmt.Sprintf("images/avatar/%d-%s", userID, fileHeader.Filename)
 
 	_ = ctx.SaveUploadedFile(fileHeader, path)
@@ -109,21 +108,22 @@ func (c *UserControllerImpl) UploadAvatar(ctx *gin.Context) {
 }
 
 func (c *UserControllerImpl) GetUserDetail(ctx *gin.Context) {
-	user := ctx.MustGet("currentUser").(domain.User)
+	user := ctx.MustGet("currentUser").(web.UserResponse)
 	apiResponse := formatter.APIResponse("Detail of current user", 200, "success", user)
 	ctx.JSON(200, apiResponse)
 }
 
 func (c *UserControllerImpl) DeleteCurrentUser(ctx *gin.Context) {
-	userID := ctx.MustGet("currentUser").(domain.User).ID
-	deleteUserByID, err := c.UserService.DeleteUserByID(userID)
+	user := ctx.MustGet("currentUser").(web.UserResponse)
+	deleteUserByID, err := c.UserService.DeleteUserByID(user.ID)
 	if err != nil {
 		apiResponse := formatter.APIResponse("Failed to delete user", http.StatusInternalServerError, "INTERNAL SERVER ERROR", gin.H{"error": err.Error()})
 		ctx.JSON(http.StatusInternalServerError, apiResponse)
 		return
 	}
 
-	apiResponse := formatter.APIResponse("User is successfully deleted", 200, "success", gin.H{"is_deleted": deleteUserByID})
+	apiResponse := formatter.APIResponse("User is successfully deleted", 200, "success",
+		gin.H{"user_name": user.Name, "is_deleted": deleteUserByID})
 	ctx.JSON(200, apiResponse)
 }
 
