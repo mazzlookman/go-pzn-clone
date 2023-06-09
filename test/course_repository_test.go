@@ -18,7 +18,7 @@ func TestSaveCourse(t *testing.T) {
 		Banner:      "images/banner/docker.jpg",
 	}
 
-	course, err := courseRepo.Save(cr)
+	course, err := crsRepo.Save(cr)
 	if err != nil {
 		t.Log(err.Error())
 	}
@@ -40,7 +40,7 @@ func TestUpdateCourse(t *testing.T) {
 		Banner:      "images/banner/docker.jpg",
 	}
 
-	course, err := courseRepo.Update(cr)
+	course, err := crsRepo.Update(cr)
 	if err != nil {
 		t.Log(err.Error())
 	}
@@ -52,7 +52,7 @@ func TestUpdateCourse(t *testing.T) {
 }
 
 func TestFindByID(t *testing.T) {
-	course, err := courseRepo.FindByID(4)
+	course, err := crsRepo.FindByID(4)
 	if err != nil {
 		t.Log(err.Error())
 	}
@@ -62,7 +62,7 @@ func TestFindByID(t *testing.T) {
 }
 
 func TestFindByUserID(t *testing.T) {
-	courses, err := courseRepo.FindByUserID(5)
+	courses, err := crsRepo.FindByUserID(5)
 	if err != nil {
 		t.Log(err.Error())
 	}
@@ -74,7 +74,7 @@ func TestFindByUserID(t *testing.T) {
 }
 
 func TestFindAll(t *testing.T) {
-	courses, err := courseRepo.FindAll()
+	courses, err := crsRepo.FindAll()
 	if err != nil {
 		t.Log(err.Error())
 	}
@@ -84,16 +84,16 @@ func TestFindAll(t *testing.T) {
 }
 
 func TestCountUsersLearned(t *testing.T) {
-	usersLearned, err := courseRepo.CountUsersLearned(3)
+	usersLearned, err := crsRepo.CountUsersLearned(3)
 	if err != nil {
 		t.Log(err.Error())
 	}
 
 	t.Log(usersLearned)
-}git
+}
 
 func TestFindByCategory(t *testing.T) {
-	courses, err := courseRepo.FindByCategory("devops")
+	courses, err := crsRepo.FindByCategory("devops")
 	if err != nil {
 		t.Log(err.Error())
 	}

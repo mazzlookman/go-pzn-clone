@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"go-pzn-clone/formatter"
 	"go-pzn-clone/helper"
 	"go-pzn-clone/middleware/auth"
 	"go-pzn-clone/model/domain"
@@ -32,7 +33,7 @@ func (s *UserServiceImpl) LoginUser(input web.UserLoginInput) (web.UserResponse,
 	token, err := s.JWTAuth.GenerateToken(findByEmail.ID)
 	helper.PanicIfError(err)
 
-	return helper.ToUserResponse(findByEmail, token), nil
+	return formatter.ToUserResponse(findByEmail, token), nil
 }
 
 func (s *UserServiceImpl) UploadAvatar(userID int, path string) (web.UserResponse, error) {
@@ -48,7 +49,7 @@ func (s *UserServiceImpl) UploadAvatar(userID int, path string) (web.UserRespons
 	token, err := s.JWTAuth.GenerateToken(update.ID)
 	helper.PanicIfError(err)
 
-	return helper.ToUserResponse(update, token), nil
+	return formatter.ToUserResponse(update, token), nil
 }
 
 func (s *UserServiceImpl) RegisterUser(input web.UserRegisterInput) (web.UserResponse, error) {
@@ -73,7 +74,7 @@ func (s *UserServiceImpl) RegisterUser(input web.UserRegisterInput) (web.UserRes
 	token, err := s.JWTAuth.GenerateToken(save.ID)
 	helper.PanicIfError(err)
 
-	return helper.ToUserResponse(save, token), nil
+	return formatter.ToUserResponse(save, token), nil
 }
 
 func (s *UserServiceImpl) UpdateUser(userID int, input web.UserRegisterInput) (web.UserResponse, error) {
@@ -91,7 +92,7 @@ func (s *UserServiceImpl) UpdateUser(userID int, input web.UserRegisterInput) (w
 	token, err := s.JWTAuth.GenerateToken(update.ID)
 	helper.PanicIfError(err)
 
-	return helper.ToUserResponse(update, token), nil
+	return formatter.ToUserResponse(update, token), nil
 }
 
 func (s *UserServiceImpl) FindUserByID(userID int) (web.UserResponse, error) {
@@ -105,7 +106,7 @@ func (s *UserServiceImpl) FindUserByID(userID int) (web.UserResponse, error) {
 	token, err := s.JWTAuth.GenerateToken(findByID.ID)
 	helper.PanicIfError(err)
 
-	return helper.ToUserResponse(findByID, token), nil
+	return formatter.ToUserResponse(findByID, token), nil
 }
 
 func (s *UserServiceImpl) EmailAvailabilityCheck(email web.EmailAvailability) (bool, error) {

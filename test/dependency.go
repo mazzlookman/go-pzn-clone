@@ -5,6 +5,7 @@ import (
 	"go-pzn-clone/middleware/auth"
 	"go-pzn-clone/repository"
 	"go-pzn-clone/service"
+	"testing"
 )
 
 var (
@@ -13,5 +14,12 @@ var (
 	userRepo    = repository.NewUserRepository(db)
 	userService = service.NewUserService(userRepo, jwtAuth)
 
-	courseRepo = repository.NewCourseRepository(db)
+	crsRepo    = repository.NewCourseRepository(db)
+	crsService = service.NewCourseService(crsRepo)
 )
+
+func logError(err error, t *testing.T) {
+	if err != nil {
+		t.Log(err.Error())
+	}
+}
