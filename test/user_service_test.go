@@ -10,7 +10,7 @@ import (
 
 func TestRegisterUser(t *testing.T) {
 	input := web.UserRegisterInput{
-		Name:     "Ucup Lagi",
+		Name:     "Ucup Tamvan",
 		Email:    "ucup@test.com",
 		Password: "123",
 	}
@@ -20,7 +20,7 @@ func TestRegisterUser(t *testing.T) {
 
 	findUserByID, _ := userService.FindUserByID(userResponse.ID)
 
-	assert.Equal(t, "Ucup Lagi", userResponse.Name)
+	assert.Equal(t, "Ucup Tamvan", userResponse.Name)
 	assert.Equal(t, userResponse.ID, findUserByID.ID)
 }
 

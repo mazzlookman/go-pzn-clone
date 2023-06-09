@@ -8,6 +8,6 @@ type CourseRepository interface {
 	FindByID(courseID int) (domain.Course, error)
 	FindByUserID(userID int) ([]domain.Course, error)
 	FindAll() ([]domain.Course, error)
-	FindByCategoryID(categoryID int) ([]domain.Course, error)
-	CountUserLiked(courseID int) (int, error)
+	FindByCategory(category string) ([]domain.Course, error)
+	CountUsersLearned(courseID int) (int, error)
 }

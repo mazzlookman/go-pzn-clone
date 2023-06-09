@@ -9,7 +9,9 @@ import (
 
 var (
 	db          = app.DBConnection()
-	userRepo    = repository.NewUserRepository(db)
-	userService = service.NewUserService(userRepo)
 	jwtAuth     = auth.NewJWTAuth()
+	userRepo    = repository.NewUserRepository(db)
+	userService = service.NewUserService(userRepo, jwtAuth)
+
+	courseRepo = repository.NewCourseRepository(db)
 )
