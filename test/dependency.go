@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	db          = app.DBConnection()
-	jwtAuth     = auth.NewJWTAuth()
+	db      = app.DBConnection()
+	jwtAuth = auth.NewJWTAuth()
+
 	userRepo    = repository.NewUserRepository(db)
 	userService = service.NewUserService(userRepo, jwtAuth)
 
@@ -19,6 +20,8 @@ var (
 
 	ltRepo    = repository.NewLessonTitleRepository(db)
 	ltService = service.NewLessonTitleService(ltRepo)
+
+	lcRepo = repository.NewLessonContentRepository(db)
 )
 
 func logError(err error, t *testing.T) {
