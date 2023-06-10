@@ -57,3 +57,23 @@ func ToLessonTitlesResponses(titles []domain.LessonTitle) []web.LessonTitleRespo
 
 	return lessonTitleResponses
 }
+
+func ToLessonContentResponse(content domain.LessonContent) web.LessonContentResponse {
+	return web.LessonContentResponse{
+		ID:            content.ID,
+		LessonTitleID: content.LessonTitleID,
+		InOrder:       content.InOrder,
+		Content:       content.Content,
+	}
+}
+
+func ToLessonContentResponses(contents []domain.LessonContent) []web.LessonContentResponse {
+	lessonContentResponses := []web.LessonContentResponse{}
+
+	for _, lessonContent := range contents {
+		lessonContentResponse := ToLessonContentResponse(lessonContent)
+		lessonContentResponses = append(lessonContentResponses, lessonContentResponse)
+	}
+
+	return lessonContentResponses
+}

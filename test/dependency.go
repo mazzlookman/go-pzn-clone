@@ -21,7 +21,8 @@ var (
 	ltRepo    = repository.NewLessonTitleRepository(db)
 	ltService = service.NewLessonTitleService(ltRepo)
 
-	lcRepo = repository.NewLessonContentRepository(db)
+	lcRepo    = repository.NewLessonContentRepository(db)
+	lcService = service.NewLessonContentService(lcRepo)
 )
 
 func logError(err error, t *testing.T) {
