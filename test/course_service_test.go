@@ -14,7 +14,6 @@ func TestCourseCreate(t *testing.T) {
 		Description: "Descripsi Panjang",
 		Perks:       "perks1, perks2, perks3",
 		Price:       99000,
-		Banner:      "image/banner/java.jpg",
 	}
 
 	create, err := crsService.Create(input)
@@ -34,7 +33,6 @@ func TestCourseUpdate(t *testing.T) {
 		Description: "Descripsi Panjang",
 		Perks:       "perks1, perks2, perks3",
 		Price:       99000,
-		Banner:      "image/banner/java.jpg",
 	}
 	update, _ := crsService.Update(6, input)
 
@@ -74,4 +72,13 @@ func TestCountUserLearned(t *testing.T) {
 	logError(err, t)
 
 	t.Log(countUsersLearned)
+}
+
+func TestCourseFindBySlug(t *testing.T) {
+	courseResponses, err := crsService.FindBySlug("php")
+	logError(err, t)
+
+	for _, courseResponse := range courseResponses {
+		t.Log(courseResponse)
+	}
 }

@@ -102,3 +102,12 @@ func TestFindByCategory(t *testing.T) {
 		t.Log(course)
 	}
 }
+
+func TestFindBySlug(t *testing.T) {
+	courses, err := crsRepo.FindBySlug("javas")
+	logError(err, t)
+
+	for _, course := range courses {
+		t.Log(course)
+	}
+}

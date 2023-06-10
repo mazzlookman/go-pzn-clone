@@ -19,6 +19,14 @@ func (r *CourseRepositoryImpl) dbManual() (*sql.DB, context.Context) {
 	return db, context.Background()
 }
 
+func (r *CourseRepositoryImpl) FindBySlug(slug string) ([]domain.Course, error) {
+	courses := []domain.Course{}
+	err := r.db.Where("slug LIKE ?", "%"+slug+"%").Find(&courses).Error
+	helper.PanicIfError(err)
+
+	return courses, nil
+}
+
 func (r *CourseRepositoryImpl) Save(course domain.Course) (domain.Course, error) {
 	err := r.db.Create(&course).Error
 	helper.PanicIfError(err)

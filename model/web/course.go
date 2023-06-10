@@ -7,7 +7,6 @@ type CourseInput struct {
 	Description string `json:"description"`
 	Perks       string `json:"perks"`
 	Price       int    `json:"price"`
-	Banner      string `json:"banner"`
 }
 
 type CourseResponse struct {
@@ -19,4 +18,12 @@ type CourseResponse struct {
 	Perks       string `json:"perks"`
 	Price       int    `json:"price"`
 	Banner      string `json:"banner"`
+}
+
+type CourseIDFromURI struct {
+	ID int `uri:"course_id"`
+}
+
+type CourseSlug struct {
+	Slug string `json:"slug"`
 }

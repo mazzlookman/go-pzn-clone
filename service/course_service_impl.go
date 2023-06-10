@@ -13,6 +13,26 @@ type CourseServiceImpl struct {
 	repository.CourseRepository
 }
 
+func (s *CourseServiceImpl) UploadBanner(courseID int, path string) (web.CourseResponse, error) {
+	findByID, err := s.CourseRepository.FindByID(courseID)
+	helper.PanicIfError(err)
+
+	findByID.Banner = path
+	findByID.UpdatedAt = time.Now()
+
+	course, err := s.CourseRepository.Update(findByID)
+	helper.PanicIfError(err)
+
+	return formatter.ToCourseResponse(course), nil
+}
+
+func (s *CourseServiceImpl) FindBySlug(slug string) ([]web.CourseResponse, error) {
+	courses, err := s.CourseRepository.FindBySlug(slug)
+	helper.PanicIfError(err)
+
+	return formatter.ToCourseResponses(courses), nil
+}
+
 func NewCourseService(courseRepository repository.CourseRepository) *CourseServiceImpl {
 	return &CourseServiceImpl{CourseRepository: courseRepository}
 }
@@ -25,7 +45,6 @@ func (s *CourseServiceImpl) Create(input web.CourseInput) (web.CourseResponse, e
 		Description: input.Description,
 		Perks:       input.Perks,
 		Price:       input.Price,
-		Banner:      input.Banner,
 	}
 
 	save, err := s.CourseRepository.Save(course)
@@ -44,7 +63,6 @@ func (s *CourseServiceImpl) Update(courseID int, input web.CourseInput) (web.Cou
 	findByID.Description = input.Description
 	findByID.Perks = input.Perks
 	findByID.Price = input.Price
-	findByID.Banner = input.Banner
 	findByID.UpdatedAt = time.Now()
 
 	course, err := s.CourseRepository.Update(findByID)
