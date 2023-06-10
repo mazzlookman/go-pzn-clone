@@ -17,7 +17,8 @@ var (
 	crsRepo    = repository.NewCourseRepository(db)
 	crsService = service.NewCourseService(crsRepo)
 
-	ltRepo = repository.NewLessonTitleRepository(db)
+	ltRepo    = repository.NewLessonTitleRepository(db)
+	ltService = service.NewLessonTitleService(ltRepo)
 )
 
 func logError(err error, t *testing.T) {

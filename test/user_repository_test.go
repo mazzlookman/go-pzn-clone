@@ -46,7 +46,7 @@ func TestFindByEmailUser(t *testing.T) {
 	assert.Equal(t, "user", findByEmail.Role)
 }
 
-func TestUpdate(t *testing.T) {
+func TestUpdateUser(t *testing.T) {
 	findByID, err := userRepo.FindByID(1)
 	helper.PanicIfError(err)
 
