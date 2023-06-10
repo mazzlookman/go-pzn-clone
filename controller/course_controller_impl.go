@@ -152,7 +152,7 @@ func (c *CourseControllerImpl) CountUserLearned(ctx *gin.Context) {
 	countUserLearned, err := c.CourseService.CountUserLearned(cid.ID)
 	helper.PanicIfError(err)
 
-	ctx.JSON(200, countUserLearned)
+	ctx.JSON(200, gin.H{"users_learned": countUserLearned})
 }
 
 func NewCourseController(courseService service.CourseService) *CourseControllerImpl {
