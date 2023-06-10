@@ -23,11 +23,16 @@ func RouterInitialized() *gin.Engine {
 	courseService := service.NewCourseService(courseRepository)
 	courseController := controller.NewCourseController(courseService)
 
+	//lesson titles dependency
+	lessonTitleRepository := repository.NewLessonTitleRepository(db)
+	lessonTitleService := service.NewLessonTitleService(lessonTitleRepository)
+	lessonTitleController := controller.NewLessonTitleController(lessonTitleService)
+
 	//router
 	router := gin.Default()
 	api := router.Group("/api/v1")
 
-	//user endpoint
+	//user endpoints
 	api.POST("/email-checkers", userController.EmailAvailabilityCheck)
 	api.POST("/users", userController.RegisterUser)
 	api.POST("/users/login", userController.LoginUser)
@@ -35,7 +40,7 @@ func RouterInitialized() *gin.Engine {
 	api.DELETE("/users", middleware.JWTAuthMiddleware(userAuth, userService), userController.DeleteCurrentUser)
 	api.GET("/users", middleware.JWTAuthMiddleware(userAuth, userService), userController.GetUserDetail)
 
-	//course endpoint
+	//course endpoints
 	api.POST("/courses", middleware.JWTAuthMiddleware(userAuth, userService), courseController.CreateCourse)
 	api.GET("/courses", courseController.GetCourseByCategory)
 	api.PUT("/courses/:course_id", middleware.JWTAuthMiddleware(userAuth, userService), courseController.UpdateCourse)
@@ -44,6 +49,11 @@ func RouterInitialized() *gin.Engine {
 	api.GET("/courses/all", courseController.GetAllCourse)
 	api.GET("/courses/:course_id", courseController.CountUserLearned)
 	api.PUT("/courses/:course_id/banner", middleware.JWTAuthMiddleware(userAuth, userService), courseController.UploadBanner)
+
+	//lesson title endpoints
+	api.POST("/courses/lessons", lessonTitleController.CreateLessonTitle)
+	api.PUT("/courses/lessons/:lt_id", lessonTitleController.UpdateLessonTitle)
+	api.GET("/courses/lessons/:course_id", lessonTitleController.GetLessonTitleByCourseID)
 
 	return router
 }

@@ -12,3 +12,7 @@ type LessonTitleResponse struct {
 	InOrder  int    `json:"in_order"`
 	Title    string `json:"title"`
 }
+
+type LessonTitleIDFromURI struct {
+	ID int `uri:"lt_id"`
+}
