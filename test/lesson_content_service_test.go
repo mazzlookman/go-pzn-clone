@@ -8,9 +8,9 @@ import (
 
 func TestCreateLCService(t *testing.T) {
 	lessonContentInput := web.LessonContentInput{
-		LessonTitleID: 4,
+		LessonTitleID: 1,
 		InOrder:       1,
-		Content:       "contents/php_dasar_1.mp4",
+		Content:       "resources/contents/exp_1.mp4",
 	}
 
 	lessonContentResponse, err := lcService.Create(lessonContentInput)
@@ -21,21 +21,21 @@ func TestCreateLCService(t *testing.T) {
 
 func TestUpdateLCService(t *testing.T) {
 	lessonContentInput := web.LessonContentInput{
-		LessonTitleID: 4,
+		LessonTitleID: 1,
 		InOrder:       2,
-		Content:       "contents/php_dasar_2.mp4",
+		Content:       "resources/contents/exp_1.mp4",
 	}
 
 	lessonContentResponse, err := lcService.Create(lessonContentInput)
 	logError(err, t)
 
-	lessonContentInput.Content = "contents/php_dasar_2_updated.mp4"
+	lessonContentInput.Content = "resources/contents/exp_2.mp4"
 
 	updated, err := lcService.Update(lessonContentResponse.ID, lessonContentInput)
 	logError(err, t)
 
 	assert.Equal(t, lessonContentResponse.ID, updated.ID)
-	assert.Equal(t, "contents/php_dasar_2_updated.mp4", updated.Content)
+	assert.Equal(t, "resources/contents/exp_2.mp4", updated.Content)
 }
 
 func TestFindLCByLTID(t *testing.T) {

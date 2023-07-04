@@ -7,6 +7,7 @@ type LessonContent struct {
 	LessonTitleID int
 	InOrder       int
 	Content       string
+	Duration      string
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 }

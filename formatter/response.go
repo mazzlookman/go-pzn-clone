@@ -64,6 +64,7 @@ func ToLessonContentResponse(content domain.LessonContent) web.LessonContentResp
 		LessonTitleID: content.LessonTitleID,
 		InOrder:       content.InOrder,
 		Content:       content.Content,
+		Duration:      content.Duration,
 	}
 }
 

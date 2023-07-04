@@ -11,3 +11,7 @@ claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
 
 users > courses = many to many
 categories > courses = many to many
+
+github.com/vansante/go-ffprobe v1.1.0 // indirect
+
+os.remove("./"+path)

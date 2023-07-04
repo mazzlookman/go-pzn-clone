@@ -28,6 +28,11 @@ func RouterInitialized() *gin.Engine {
 	lessonTitleService := service.NewLessonTitleService(lessonTitleRepository)
 	lessonTitleController := controller.NewLessonTitleController(lessonTitleService)
 
+	//lesson content dependency
+	lessonContentRepository := repository.NewLessonContentRepository(db)
+	lessonContentService := service.NewLessonContentService(lessonContentRepository)
+	lessonContentController := controller.NewLessonContentController(lessonContentService)
+
 	//router
 	router := gin.Default()
 	api := router.Group("/api/v1")
@@ -54,6 +59,11 @@ func RouterInitialized() *gin.Engine {
 	api.POST("/courses/lessons", lessonTitleController.CreateLessonTitle)
 	api.PUT("/courses/lessons/:lt_id", lessonTitleController.UpdateLessonTitle)
 	api.GET("/courses/lessons/:course_id", lessonTitleController.GetLessonTitleByCourseID)
+
+	//lesson content endpoints
+	api.POST("/courses/lt/contents", lessonContentController.CreateLessonContent)
+	api.PUT("/courses/lt/contents/:lc_id", lessonContentController.UpdateLessonContent)
+	api.GET("/courses/lt/:lt_id/contents", lessonContentController.GetByLessonTitleID)
 
 	return router
 }
